@@ -72,11 +72,11 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rules" {
   for_each = local.rules
 
   security_group_id = openstack_networking_secgroup_v2.secgroup1.id
-  description       = each.value.key
+  description       = each.key
   direction         = each.value.direction
   protocol          = each.value.protocol
-  port_range_min    = each.value.port_range_min
-  port_range_max    = each.value.port_range_max
+  port_range_min    = try(each.value.port_range_min, null)
+  port_range_max    = try(each.value.port_range_max, null)
   ethertype         = "IPv4"
   remote_ip_prefix  = "0.0.0.0/0"
 }
