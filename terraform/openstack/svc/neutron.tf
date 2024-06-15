@@ -57,38 +57,26 @@ resource "openstack_networking_secgroup_v2" "secgroup1" {
   delete_default_rules = "true"
 }
 
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_1" {
-  security_group_id = openstack_networking_secgroup_v2.secgroup1.id
-  direction         = "ingress"
-  ethertype         = "IPv4"
-  protocol          = "tcp"
-  port_range_min    = 22
-  port_range_max    = 22
-  remote_ip_prefix  = "0.0.0.0/0"
+locals {
+  rules = {
+    "allow_ssh_in"       = { direction = "ingress", port_range_min = 22, port_range_max = 22, protocol = "tcp" },
+    "allow_icmp_in"      = { direction = "ingress", protocol = "icmp" },
+    "allow_icmp_out"     = { direction = "egress", protocol = "icmp" },
+    "allow_https_out"    = { direction = "egress", port_range_min = 443, port_range_max = 443, protocol = "tcp" },
+    "allow_nodeport_in"  = { direction = "ingress", port_range_min = 30000, port_range_max = 32767, protocol = "tcp" } # udp - ?
+    "allow_apiserver_in" = { direction = "ingress", port_range_min = 6443, port_range_max = 6443, protocol = "tcp" }
+  }
 }
 
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_2" {
-  security_group_id = openstack_networking_secgroup_v2.secgroup1.id
-  direction         = "ingress"
-  ethertype         = "IPv4"
-  protocol          = "icmp"
-  remote_ip_prefix  = "0.0.0.0/0"
-}
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rules" {
+  for_each = local.rules
 
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_3" {
   security_group_id = openstack_networking_secgroup_v2.secgroup1.id
-  direction         = "egress"
+  description       = each.value.key
+  direction         = each.value.direction
+  protocol          = each.value.protocol
+  port_range_min    = each.value.port_range_min
+  port_range_max    = each.value.port_range_max
   ethertype         = "IPv4"
-  protocol          = "icmp"
-  remote_ip_prefix  = "0.0.0.0/0"
-}
-
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_4" {
-  security_group_id = openstack_networking_secgroup_v2.secgroup1.id
-  direction         = "egress"
-  ethertype         = "IPv4"
-  protocol          = "tcp"
-  port_range_min    = 443
-  port_range_max    = 443
   remote_ip_prefix  = "0.0.0.0/0"
 }
