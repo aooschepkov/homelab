@@ -25,3 +25,27 @@ variable "ssh_pub_key" {
 variable "vm_count" {
   type = number
 }
+
+variable "vm_pass" {
+  type = string
+}
+
+variable "vm_user" {
+  type = string
+}
+
+variable "vm_name" {
+  type = string
+}
+
+variable "vm_memory" {
+  type = number
+}
+
+variable "vm_vcpus" {
+  type = number
+}
+
+variable "vm_disk_size" {
+  type = number
+}
