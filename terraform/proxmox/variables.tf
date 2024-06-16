@@ -1,29 +1,36 @@
 variable "endpoint" {
-  type = string
+  type    = string
+  default = "https://proxmox:8006/"
 }
 
 variable "username" {
-  type = string
+  type    = string
+  default = "root@pam"
 }
 
 variable "password" {
-  type = string
+  type    = string
+  default = "pwd"
 }
 
 variable "ssh_username" {
-  type = string
+  type    = string
+  default = "root"
 }
 
 variable "ssh_key" {
-  type = string
+  type    = string
+  default = "/home/user/.ssh/id_rsa"
 }
 
 variable "ssh_pub_key" {
-  type = string
+  type    = string
+  default = "/home/user/.ssh/id_rsa.pub"
 }
 
 variable "vm_count" {
-  type = number
+  type    = number
+  default = 0
 }
 
 variable "vm_pass" {

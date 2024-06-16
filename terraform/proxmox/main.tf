@@ -20,11 +20,13 @@ resource "proxmox_virtual_environment_file" "cloud_config" {
     data = <<-EOF
     #cloud-config
     hostname: ${var.vm_name}${count.index + 1}
+    fqdn: ${var.vm_name}${count.index + 1}.internal
     users:
       - default
       - name: ${var.vm_user}
-        groups: sudo
+        groups: [ sudo ]
         passwd: ${var.vm_pass}
+        lock_passwd: false
         shell: /bin/bash
         ssh-authorized-keys:
           - ${trimspace(data.local_file.ssh_public_key.content)}
