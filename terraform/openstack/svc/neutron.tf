@@ -4,8 +4,8 @@ resource "openstack_networking_network_v2" "external_network" {
   admin_state_up = "true"
   segments {
     physical_network = "physnet1"
-    network_type     = "vlan"
-    segmentation_id  = 89
+    network_type     = "flat"
+    # segmentation_id  = 89
   }
 }
 

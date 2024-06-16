@@ -9,7 +9,7 @@ variable "tenant_name" {
 }
 
 variable "password" {
-  type = string
+  type    = string
   default = "password"
 }
 
@@ -21,4 +21,8 @@ variable "auth_url" {
 variable "region" {
   type    = string
   default = "RegionOne"
+}
+
+variable "public_key" {
+  type = string
 }
